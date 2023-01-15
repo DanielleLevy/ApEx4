@@ -6,8 +6,6 @@
 using namespace std;
 
 
-
-
     void StandardIO:: read(string & out) {
         getline(cin, out);
     }

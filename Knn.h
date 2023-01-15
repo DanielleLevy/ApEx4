@@ -20,9 +20,9 @@ public:
     string typeDistance;
     int theK;
     vector<double> theVectorFromUser;
-    Knn (vector<Sample> db, string distance, int k, vector<double> vectorFromUser);
+    Knn (vector<Sample> db, string distance, int k);
 
-    string findTheLabel ();
+    string findTheLabel (vector<double> vectorFromUser);
 };
 
 #endif //EX2_KNN_H

@@ -9,7 +9,7 @@ using namespace std;
 * The KNN class which contains the details of the current KNN problem and its solution algorithm
 */
 
-Knn::Knn (vector<Sample> db, string distance, int k, vector<double> vectorFromUser)
+Knn::Knn (vector<Sample> db, string distance, int k)
 {
     /**
      * Constructor of KNN. Initializes the problem with all the details received from the user:
@@ -18,9 +18,8 @@ Knn::Knn (vector<Sample> db, string distance, int k, vector<double> vectorFromUs
     theDb=db;
     typeDistance=distance;
     theK=k;
-    theVectorFromUser=vectorFromUser;
 }
-string Knn::findTheLabel (){
+string Knn::findTheLabel (vector<double> vectorFromUser){
     /**
      * This function implements the KNN algorithm. Solves the given problem,
      * returns a string of the label name of the K nearest neighbors of the obtained vector,

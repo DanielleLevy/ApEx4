@@ -132,7 +132,7 @@ int argumentsCheckClient (string distance, int k){
     // Checking input on the distance function type. It must be one of the five known functions.
     // Otherwise, you will print an error message and exit the program:
     if(distance != "AUC" && distance != "MAN" && distance != "CHB" && distance != "CAN" && distance != "MIN") {
-        return -1;
+        return -2;
     }
 
     // Checking input on K. K must be a positive integer,

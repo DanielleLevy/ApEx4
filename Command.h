@@ -8,16 +8,24 @@ using namespace std;
 #include <string>
 #include "DefaultIO.h"
 #include "Sample.h"
+#include "Header.h"
+#include "Knn.h"
+#include<thread>
 
 struct SharedState{
-    vector<Sample> db;
+    vector<Sample> dbTrain;
+    vector<Sample> dbTest;
     string answer;
     int k;
     string distanceM;
     vector<double> vectorToClass;
+    bool isUpload;
+    bool isClassify;
     SharedState(){
         k=5;
         distanceM="AUC";
+        isUpload= false;
+        isClassify=false;
     }
 };
 class Command {
@@ -39,6 +47,7 @@ class Setting:public Command {
 public:
     Setting(DefaultIO* dio): Command(dio,"algorithm settings"){};
     virtual void execute(SharedState* sharedState);
+    int checkKandM(SharedState* sharedState,string message);
 
 };
 class Classify: public Command {

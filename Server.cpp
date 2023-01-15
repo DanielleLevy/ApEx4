@@ -159,7 +159,7 @@ int Server::checkFromClient(string message) {/*
 
 string Server::calcServer(vector<double> vectorfromuser, string distance, int k) {
     //The function receives a valid input, creates an instance of KNN and returns the label
-    Knn answer(db, distance, k, vectorfromuser);
+    Knn answer(db, distance, k);
     return  answer.findTheLabel();
 }
 
