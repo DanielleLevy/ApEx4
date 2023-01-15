@@ -8,21 +8,10 @@ using namespace std;
 #include <string>
 #include "DefaultIO.h"
 #include "Sample.h"
-class Command {
-protected:
-    DefaultIO* dio;
-public:
-    string description;
-    Command(DefaultIO* dio, string des);
-    virtual void execute();
-    virtual ~Command(){}
 
-};
 struct SharedState{
     vector<Sample> db;
     string answer;
-    float threshold;
-    int testFileSize;
     int k;
     string distanceM;
     vector<double> vectorToClass;
@@ -31,32 +20,47 @@ struct SharedState{
         distanceM="AUC";
     }
 };
-class UploadCSV:public Command {
-    UploadCSV(DefaultIO* dio):Command(dio,"upload an unclassified csv datafile"){};
+class Command {
+protected:
+    DefaultIO* dio;
+public:
+    string description;
+    Command(DefaultIO* dio, string des);
     virtual void execute(SharedState* sharedState);
+    virtual ~Command(){}
 
 };
+class UploadCSV:public Command {
+public:
+    virtual void execute(SharedState* sharedState);
+    UploadCSV(DefaultIO* dio):Command(dio,"upload an unclassified csv datafile"){}
+};
 class Setting:public Command {
+public:
     Setting(DefaultIO* dio): Command(dio,"algorithm settings"){};
     virtual void execute(SharedState* sharedState);
 
 };
 class Classify: public Command {
+public:
     Classify(DefaultIO* dio): Command(dio,"classify data"){};
     virtual void execute(SharedState* sharedState);
 
 };
 class DisplayResult: public Command {
+public:
     DisplayResult(DefaultIO* dio): Command(dio,"display results"){};
     virtual void execute(SharedState* sharedState);
 
 };
 class DownlandResult:public Command {
+public:
     DownlandResult(DefaultIO* dio): Command(dio,"download results"){};
     virtual void execute(SharedState* sharedState);
 
 };
 class Exit:public Command {
+public:
     Exit(DefaultIO* dio): Command(dio,"exit"){};
     virtual void execute(SharedState* sharedState);
 

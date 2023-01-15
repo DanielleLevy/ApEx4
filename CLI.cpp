@@ -3,9 +3,10 @@
 //
 
 #include "CLI.h"
+
 CLI::CLI(DefaultIO* dio) {
     this->dio=dio;
-    commandsToExe.push_back(new UploadCSV(nullptr, std::string(), dio));
+    commandsToExe.push_back(new UploadCSV(dio));
     commandsToExe.push_back(new Setting(dio));
     commandsToExe.push_back(new Classify(dio));
     commandsToExe.push_back(new DisplayResult(dio));
@@ -22,18 +23,18 @@ void CLI::start(){
             string s("1.");
             s[0]=((char)(i+1+'0'));
             dio->write(s);
-            dio->write(commands[i]->description+"\n");
+            dio->write(commandsToExe[i]->description+"\n");
         }
         string input = dio->read();
         index=input[0]-'0'-1;
         if(index>=0 && index<=6)
-            commands[index]->execute(&sharedState);
+            commandsToExe[index]->execute(&sharedState);
     }
 }
 
 
 CLI::~CLI() {
-    for(size_t i=0;i<commands.size();i++){
-        delete commands[i];
+    for(size_t i=0;i<commandsToExe.size();i++){
+        delete commandsToExe[i];
     }
 }
