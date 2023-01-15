@@ -9,25 +9,31 @@ using namespace std;
 
 
     void StandardIO:: read(string & out) {
-        // Read from standard input
         getline(cin, out);
     }
     void StandardIO:: write(const std::string & in) {
-        // Write to standard output
         cout<<in;
     }
 
 
-
-    void SocketIO::read(std::string & out) {
-        char buffer[4096];
-        // Read from socket
-        int len = recv(sockfd, buffer, 4096, 0);
-        buffer[len] = '\0';
-        out = buffer;
+string SocketIO::read(){
+    char c=0;
+    size_t i=0;
+    string s="";
+    while(c!='\n'){
+        recv(clientID,&c,sizeof(char),0);
+        s+=c;
     }
+    return s;
+}
+void SocketIO::write(string text){
+    const char* txt=text.c_str();
+    send(clientID,txt,strlen(txt),0);
+}
 
-    void SocketIO::write(const std::string & in) {
-        // Write to socket
-        send(sockfd, in.c_str(), in.size(), 0);
-    }
+void SocketIO::write(float f){
+    ostringstream ss;
+    ss <<f;
+    string s(ss.str());
+    write(s);
+}

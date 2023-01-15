@@ -5,15 +5,18 @@
 #ifndef APEX4_DEFAULTIO_H
 #define APEX4_DEFAULTIO_H
 using namespace std;
-#include <string>
+#include <string.h>
 #include "iostream"
 #include <sys/socket.h>
-
+#include <sstream>
 
 class DefaultIO {
 public:
-    virtual void read(string & out) = 0;
-    virtual void write(const string & in) = 0;
+    virtual string read()=0;
+    virtual void write(string text)=0;
+    virtual void write(float f)=0;
+    virtual void read(float* f)=0;
+    virtual ~DefaultIO(){}
 };
 
 class StandardIO : public DefaultIO {
@@ -22,15 +25,20 @@ public:
     void write(const std::string & in) ;
 };
 class SocketIO : public DefaultIO {
-private:
-    int sockfd;
-
+    int clientID;
 public:
-    SocketIO(int fd) : sockfd(fd);
 
-    void read(std::string & out);
-    void write(const std::string & in);
+    SocketIO(int clientID):clientID(clientID){}
+
+    virtual string read();
+    virtual void write(string text);
+
+    virtual void write(float f);
+
+    virtual void read(float* f);
+
 };
+
 
 
 

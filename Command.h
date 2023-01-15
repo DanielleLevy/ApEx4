@@ -33,32 +33,32 @@ struct SharedState{
 };
 class UploadCSV:public Command {
     UploadCSV(DefaultIO* dio):Command(dio,"upload an unclassified csv datafile"){};
-    virtual void execute();
+    virtual void execute(SharedState* sharedState);
 
 };
 class Setting:public Command {
     Setting(DefaultIO* dio): Command(dio,"algorithm settings"){};
-    virtual void execute();
+    virtual void execute(SharedState* sharedState);
 
 };
 class Classify: public Command {
     Classify(DefaultIO* dio): Command(dio,"classify data"){};
-    virtual void execute();
+    virtual void execute(SharedState* sharedState);
 
 };
 class DisplayResult: public Command {
     DisplayResult(DefaultIO* dio): Command(dio,"display results"){};
-    virtual void execute();
+    virtual void execute(SharedState* sharedState);
 
 };
 class DownlandResult:public Command {
     DownlandResult(DefaultIO* dio): Command(dio,"download results"){};
-    virtual void execute();
+    virtual void execute(SharedState* sharedState);
 
 };
 class Exit:public Command {
     Exit(DefaultIO* dio): Command(dio,"exit"){};
-    virtual void execute();
+    virtual void execute(SharedState* sharedState);
 
 };
 
