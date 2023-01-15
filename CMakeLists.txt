@@ -7,10 +7,10 @@ add_executable(client.out "Header.h"
         "Distance.h"
         "Sample.cpp"
         "Sample.h"
-        "InputAndValidation.cpp" Knn.cpp  Client.cpp Client.h)
+        "InputAndValidation.cpp" Knn.cpp  Client.cpp Client.h Command.cpp Command.h Command.h DefaultIO.cpp DefaultIO.h CLI.cpp CLI.h CLI.h)
 add_executable(server.out  "Header.h"
         "Distance.cpp"
         "Distance.h"
         "Sample.cpp"
         "Sample.h"
-        "InputAndValidation.cpp" Knn.cpp Server.cpp Server.h)
+        "InputAndValidation.cpp" Knn.cpp Server.cpp Server.h DefaultIO.cpp DefaultIO.h)
