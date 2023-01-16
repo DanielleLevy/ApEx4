@@ -6,7 +6,7 @@
 #include "Header.h"
 using namespace std;
 
-vector<Sample> readFromFile(string fileName){
+vector<Sample> readFromFile(string fileName,int flag){
     /**
      * The function receives the name of the file and reads from it.
      * The function returns a vector of examples where each is an instance of the classifier.
@@ -14,7 +14,7 @@ vector<Sample> readFromFile(string fileName){
     vector<Sample> db; //The vector that is finally returned
     vector<string> row; //A vector that holds each line in the file.
     vector<double> detail; //A vector that will hold the numbers for each example.
-    string line, word,label;
+    string line, word,label="";
     int size, startSize,counter=0;
     string nameFile=fileName;
     fstream file (nameFile, ios::in);
@@ -30,7 +30,12 @@ vector<Sample> readFromFile(string fileName){
             while(getline(str, word, ','))
                 //Inserts each word in the line as a variable in the vector.
                 row.push_back(word);
-            size= row.size()-1; //Subtracts the last value from the size and this is the size of the measurements.
+            if(flag==0){
+                size= row.size()-1; //Subtracts the last value from the size and this is the size of the measurements.
+            }
+            else{
+                size=row.size();
+            }
             if(counter==0){
                 //Checks if this is the first vector, if so saves its size and compares it with the size of all the other vectors in the file.
                 startSize=size;
@@ -40,7 +45,9 @@ vector<Sample> readFromFile(string fileName){
                 cout<<"The file contains vectors of different length, try another file."<<endl;
                 exit(0);
             }
-            label=row.back();   //Saves the label.
+            if (flag==0){
+                label=row.back();   //Saves the label.
+            }
             for (int i=0;i<row.size()-1;i++){
                 //Converts the vector from a string to double.
                 try{
@@ -128,17 +135,26 @@ vector <double> createVector(string str, char seprate) {
 
 
 int argumentsCheckClient (string distance, int k){
-
+    int flagM=0,flagK=0;
     // Checking input on the distance function type. It must be one of the five known functions.
     // Otherwise, you will print an error message and exit the program:
     if(distance != "AUC" && distance != "MAN" && distance != "CHB" && distance != "CAN" && distance != "MIN") {
-        return -2;
+        flagM=-1;
     }
 
     // Checking input on K. K must be a positive integer,
     // otherwise you will print an error message and exit the program:
     if(k < 1 ) {
+        flagK=-1;
+    }
+    if (flagK==-1 && flagM==0){
         return -1;
+    }
+    if (flagK==-1 && flagM==-1){
+        return -3;
+    }
+    if (flagK==0 && flagM==-1){
+        return -2;
     }
     return 0;
 

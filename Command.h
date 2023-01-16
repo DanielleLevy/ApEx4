@@ -10,7 +10,7 @@ using namespace std;
 #include "Sample.h"
 #include "Header.h"
 #include "Knn.h"
-#include<thread>
+#include <thread>
 
 struct SharedState{
     vector<Sample> dbTrain;
@@ -32,9 +32,9 @@ class Command {
 protected:
     DefaultIO* dio;
 public:
-    string description;
-    Command(DefaultIO* dio, string des);
-    virtual void execute(SharedState* sharedState);
+    const string description;
+    Command(DefaultIO* dio,const string description):dio(dio),description(description){}
+    virtual void execute(SharedState* sharedState)=0;
     virtual ~Command(){}
 
 };

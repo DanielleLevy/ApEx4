@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <string.h>
 #include "Command.h"
+#include "DefaultIO.h"
 using namespace std;
 class CLI {
     vector<Command*> commandsToExe;
@@ -18,6 +19,8 @@ class CLI {
         CLI(DefaultIO* dio);
         void start();
         virtual ~CLI();
+
+    CLI();
 };
 
 

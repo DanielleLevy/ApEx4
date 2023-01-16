@@ -2,15 +2,13 @@ cmake_minimum_required(VERSION 2.8.12.2)
 add_compile_options(-std=c++11)
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(client.out "Header.h"
-        "Distance.cpp"
-        "Distance.h"
-        "Sample.cpp"
-        "Sample.h"
-        "InputAndValidation.cpp" Knn.cpp  Client.cpp Client.h Command.cpp Command.h Command.h DefaultIO.cpp DefaultIO.h CLI.cpp CLI.h CLI.h)
-add_executable(server.out  "Header.h"
-        "Distance.cpp"
-        "Distance.h"
-        "Sample.cpp"
-        "Sample.h"
-        "InputAndValidation.cpp" Knn.cpp Server.cpp Server.h DefaultIO.cpp DefaultIO.h)
+
+add_executable(CLI
+        Distance.cpp
+        Sample.cpp
+        InputAndValidation.cpp
+        Knn.cpp
+        Server.cpp
+        DefaultIO.cpp
+        CLI.cpp
+        Command.cpp)

@@ -186,7 +186,7 @@ int Client::checkFromUser(string message){
 
 }
 
-int main(int argc, char* argv[]) {
+/*int main(int argc, char* argv[]) {
     // Receiving the ip and port arguments and checking their correctness:
 
     Client myClient = Client(argv[1], stoi(argv[2]));
@@ -209,3 +209,4 @@ int main(int argc, char* argv[]) {
         }
     }
 }
+*/

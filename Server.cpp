@@ -13,7 +13,7 @@ Server::Server(int port, string file) {/*
  * The constructor also creates a socket file descriptor using the socket function and assigns the file descriptor to the sockFD member variable.
  */
     server_port=port;
-    db= readFromFile(file);
+    db= readFromFile(file,0);
     if (db.empty()) {
         //Checks if the file is not empty:
         cout << "invalid input" << endl;
@@ -160,10 +160,11 @@ int Server::checkFromClient(string message) {/*
 string Server::calcServer(vector<double> vectorfromuser, string distance, int k) {
     //The function receives a valid input, creates an instance of KNN and returns the label
     Knn answer(db, distance, k);
-    return  answer.findTheLabel();
+//return  answer.findTheLabel();
+    return "a";
 }
 
-int main(int argc, char *argv[]){
+/*int main(int argc, char *argv[]){
     int port;
     try{
       port= stoi(argv[2]); //Converting the port to a number
@@ -189,7 +190,7 @@ int main(int argc, char *argv[]){
     }
 
 }
-
+*/
 
 
 

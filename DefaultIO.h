@@ -14,30 +14,33 @@ class DefaultIO {
 public:
     virtual string read()=0;
     virtual void write(string text)=0;
-    virtual void write(float f)=0;
-    virtual void read(float* f)=0;
+//    virtual void write(float f)=0;
+//    virtual void read(float* f)=0;
     virtual ~DefaultIO(){}
 };
 
 class StandardIO : public DefaultIO {
 public:
-    void read(string & out);
-    void write(const std::string & in) ;
-};
-class SocketIO : public DefaultIO {
-    int clientID;
-public:
-
-    SocketIO(int clientID):clientID(clientID){}
-
-    virtual string read();
-    virtual void write(string text);
-
-    virtual void write(float f);
-
-    virtual void read(float* f);
+    StandardIO();
+    void write(string text) override ;
+    string read() override;
+//    void write(float f) override;
+//    void read(float* f)  override;
 
 };
+//class SocketIO : public DefaultIO {
+//    int clientID;
+//public:
+//
+//    SocketIO(int clientID):clientID(clientID){}
+//
+//    virtual string read();
+//    virtual void write(string text);
+//    virtual void write(float f);
+
+//    virtual void read(float* f);
+
+//};
 
 
 

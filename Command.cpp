@@ -3,17 +3,14 @@
 //
 
 #include "Command.h"
-Command::Command(DefaultIO* dio,string des) {
-    dio=dio;
-    description=des;
-}
+
 
  void UploadCSV::execute(SharedState* sharedState) {
      string trainFile, testFile;
      dio->write("Please upload your local train CSV file.\n");
-     testFile=dio->read();
+     trainFile=dio->read();
 
-     sharedState->dbTrain = readFromFile(trainFile);
+     sharedState->dbTrain = readFromFile(trainFile,0);
      if (sharedState->dbTrain.empty()) {
          dio->write("Invalid input\n");
          return;
@@ -22,9 +19,9 @@ Command::Command(DefaultIO* dio,string des) {
      dio->write("Upload complete.\n");
 
      dio->write("Please upload your local test CSV file.\n");
-     trainFile=dio->read();
-    sharedState->dbTrain = readFromFile(trainFile);
-     if (sharedState->dbTrain.empty()) {
+     testFile=dio->read();
+    sharedState->dbTest = readFromFile(testFile,1);
+     if (sharedState->dbTest.empty()) {
          dio->write("Invalid input");
          return;
      }
@@ -42,6 +39,8 @@ int Setting::checkKandM(SharedState* sharedState,string message) {/*
  */
     int index=-1;//flag
     int kTempInt;
+    int flagk=0,flagM=0;
+    string distanceTemp="";
     if(message.size()==0){//check if the str empty
         return -3;
     } else {
@@ -55,15 +54,18 @@ int Setting::checkKandM(SharedState* sharedState,string message) {/*
         }
         if(index==-1){
             //If the value of the index has not changed, there are no letters in the user's message, meaning there is no distance function and the input is incorrect.
-            return -2;
+            flagM=-1;
         }
         if(index+2>message.size()-1){
             //If the input is correct, the distance function will have a length of 3 followed by a space and then K. Therefore the condition should be met, if not met the input is incorrect.
-            return -2;
+            flagM=-1;
         }
         //Dividing the message into variables according to the order in which they are supposed to be:
         string kTemp=message.substr(0,index);
-        string distanceTemp= message.substr(index,3);
+        if(flagM==0){
+             distanceTemp= message.substr(index,3);
+        }
+
         //Sending the vector cycle to a function that returns the vector in a vector variable:
         try {
             //Trying to convert K from a string to double
@@ -71,17 +73,28 @@ int Setting::checkKandM(SharedState* sharedState,string message) {/*
         }
         catch (...){
             //If the conversion failed, the input is incorrect
-            return -1;
+            ;
         }
-        if( argumentsCheckClient(distanceTemp,kTempInt)<0){
-            return argumentsCheckClient(distanceTemp,kTempInt);
+        if(argumentsCheckClient(distanceTemp,kTempInt)<0){
+                return argumentsCheckClient(distanceTemp,kTempInt);
         }
-        if(kTempInt>sharedState->dbTrain.size()){
+
+
+        if(kTempInt>sharedState->dbTrain.size()&&sharedState->isUpload== true){
             //If k is greater than the number of samples it is impossible to do the division and therefore the input is incorrect
-            return -1;
+            flagk=-1;
         }
         sharedState->k=kTempInt;
         sharedState->distanceM=distanceTemp;
+        if (flagk==-1 && flagM==0){
+            return -1;
+        }
+        if (flagk==-1 && flagM==-1){
+            return -3;
+        }
+        if (flagk==0 && flagM==-1){
+            return -2;
+        }
         return 0;
     }
 
@@ -91,20 +104,20 @@ void Setting::execute(SharedState* sharedState) {
     int checkP;
     int k = sharedState->k;
     string distanceM = sharedState->distanceM;
-    dio->write("The current KNN parameters are: K = " + std::to_string(k) +  ", distance metric = " + distanceM);
+    dio->write("The current KNN parameters are: K = " + std::to_string(k) +  ", distance metric = " + distanceM+"\n");
     string input = dio->read();
-    if (input != "\n") {
+    if (input != "") {
         checkP= checkKandM(sharedState, input);
         if(checkP<0){
             if(checkP==-1){
-                dio->write("invalid value for K");
+                dio->write("invalid value for K\n");
             }
             if(checkP==-2){
-                dio->write("invalid value for metric");
+                dio->write("invalid value for metric\n");
             }
             if(checkP==-3){
-                dio->write("invalid value for K");
-                dio->write("invalid value for metric");
+                dio->write("invalid value for K\n");
+                dio->write("invalid value for metric\n");
             }
         }
 
@@ -114,75 +127,68 @@ void Setting::execute(SharedState* sharedState) {
 
 void Classify:: execute(SharedState* sharedState)  {
     if (sharedState->isUpload== false) {
-        dio->write("please upload data");
+        dio->write("please upload data\n");
         return;
     }
         Knn answer(sharedState->dbTrain, sharedState->distanceM, sharedState->k);
         for(int i=0;i<sharedState->dbTest.size();i++){
             sharedState->dbTest[i].label=answer.findTheLabel(sharedState->dbTest[i].deatils);
         }
-        dio->write("classifying data complete");
-        sharedState->isUpload= true;
+        dio->write("classifying data complete\n");
+        sharedState->isClassify= true;
 
 }
 void DisplayResult:: execute(SharedState* sharedState)  {
-    string answer;
+    string answer="";
     if (sharedState->isUpload== false) {
-        dio->write("please upload data");
+        dio->write("please upload data\n");
         return;
     }
     if (sharedState->isClassify== false) {
-        dio->write("please classify the data");
+        dio->write("please classify the data\n");
         return;
     }
     for(int i=0;i<sharedState->dbTest.size();i++){
-        answer=(i+1) +" "+ sharedState->dbTest[i].label +"\n";
+        answer=to_string(i+1) +" "+ sharedState->dbTest[i].label +"\n";
         dio->write(answer);
     }
-    dio->write("Done.");
+    dio->write("Done.\n");
 
 }
 void DownlandResult::execute(SharedState* sharedState) {
-    if (sharedState->isUpload== false) {
-        dio->write("please upload data");
+    if (sharedState->isUpload == false) {
+        dio->write("please upload data\n");
         return;
     }
-    if (sharedState->isClassify== false) {
-        dio->write("please classify the data");
+    if (sharedState->isClassify == false) {
+        dio->write("please classify the data\n");
         return;
     }
     string fileName;
     dio->write("Please enter a path to create the file locally.\n");
     fileName = dio->read();
 
-    // Start a separate thread to handle the file download
-    thread t([&]() {
-        // Open the file for writing
-        std::ofstream out(fileName);
-        if (!out) {
-            dio->write("Error: Could not open file for writing.\n");
-            return;
-        }
+    // Open the file for writing
+    std::ofstream out(fileName);
+    if (!out) {
+        dio->write("Error: Could not open file for writing.\n");
+        return;
+    }
 
-        // Write the results to the file
-        string results[sharedState->dbTest.size()] ;
-        for(int i=0;i<sharedState->dbTest.size();i++){
-            results[i]=sharedState->dbTest[i].label;
-        }
-        for (auto &result : results) {
-            out << result << std::endl;
-        }
+    // Write the results to the file
+    vector<string> results;
+    for (int i = 0; i < sharedState->dbTest.size(); i++) {
+        results.push_back(to_string(i + 1) + " " + sharedState->dbTest[i].label);
+    }
+    results.push_back("Done.");
+    for (auto &result: results) {
+        out << result << std::endl;
+    }
 
-        out.close();
-        dio->write("File download complete.\n");
-    });
+    out.close();
 
-    // Detach the thread so it can run in the background
-    t.detach();
-
-    // immediately the main menu again
-    dio->write("Returning to main menu.\n");
 }
+
 
 void Exit::execute(SharedState* sharedState) {
     exit(0);

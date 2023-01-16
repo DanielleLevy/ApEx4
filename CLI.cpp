@@ -1,6 +1,4 @@
-//
-// Created by danie on 12/01/2023.
-//
+
 
 #include "CLI.h"
 
@@ -19,15 +17,20 @@ void CLI::start(){
     int index=-1;
     while(index!=5){
         dio->write("Welcome to the KNN Classifier Server. Please choose an option:\n");
-        for(size_t i=0;i<commandsToExe.size();i++){
+        for(size_t i=0;i<commandsToExe.size()-1;i++){
             string s("1.");
             s[0]=((char)(i+1+'0'));
             dio->write(s);
             dio->write(commandsToExe[i]->description+"\n");
         }
+        dio->write("8.");
+        dio->write(commandsToExe[5]->description+"\n");
         string input = dio->read();
         index=input[0]-'0'-1;
-        if(index>=0 && index<=6)
+        if((index>=0 && index<=5) || index==8 )
+            if(index==8){
+                index=5;
+            }
             commandsToExe[index]->execute(&sharedState);
     }
 }
@@ -37,4 +40,14 @@ CLI::~CLI() {
     for(size_t i=0;i<commandsToExe.size();i++){
         delete commandsToExe[i];
     }
+}
+
+
+
+int main(int argc, char *argv[]){
+    DefaultIO* sio  = new StandardIO;
+    CLI cli(sio);
+    cli.start();
+
+
 }
