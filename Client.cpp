@@ -19,7 +19,7 @@ bool Client::checkingIp(){
     // This is a function that checks whether the IP is correct, that is, it divides it into 4 parts
     // separated by 3 points and checks whether the IP is correct (between 0 and 255).
     // The function returns TRUE if everything is normal, and FALSE if the ip is not normal:
-    
+
     char * analyzeIp = new char[32];
     string ipSection[4];
     int theIndex = 0;
@@ -60,7 +60,7 @@ bool Client::checkingPort(){
     // This is a function that checks whether the port is correct,
     // i.e. whether it is between 1024 and 65535.
     // If everything is fine then it returns TRUE and if there is a problem then it returns FALSE:
-    
+
     if (clientPort <1024 || clientPort>65535) return false;
     return true;
 }
@@ -109,7 +109,7 @@ int Client::handleServerClient (){
         cout << buffer << endl;
     }
 
-return 0;
+    return 0;
 }
 
 int Client::initClient(){
@@ -117,22 +117,22 @@ int Client::initClient(){
     // If everything is normal, it returns 0, if it fails to create a socket or connect to the server,
     // it returns -1 and prints an error message accordingly:
 
-        if (sockFD < 0){
-            cout<<"error creating socket"<<endl;
-            return -1;
-        }
-        struct sockaddr_in sin;
-        memset(&sin, 0, sizeof(sin));
+    if (sockFD < 0){
+        cout<<"error creating socket"<<endl;
+        return -1;
+    }
+    struct sockaddr_in sin;
+    memset(&sin, 0, sizeof(sin));
 
-        sin.sin_family= AF_INET;
-        sin.sin_addr.s_addr = inet_addr(serverIp);
-        sin.sin_port = htons(clientPort);
-        if (connect(sockFD, (struct sockaddr*)&sin, sizeof(sin))<0)
-        {
-            cout<<"error connecting to server"<< endl;
-            return -1;
-        }
-return 0;
+    sin.sin_family= AF_INET;
+    sin.sin_addr.s_addr = inet_addr(serverIp);
+    sin.sin_port = htons(clientPort);
+    if (connect(sockFD, (struct sockaddr*)&sin, sizeof(sin))<0)
+    {
+        cout<<"error connecting to server"<< endl;
+        return -1;
+    }
+    return 0;
 
 }
 
@@ -158,7 +158,7 @@ int Client::checkFromUser(string message){
         }
         string vectorTemp=message.substr(0,index);
         if(index+4>message.size()-1){
-             //If the input is correct, the distance function will have a length of 3 followed by a space and then K. Therefore the condition should be met, if not met the input is incorrect.
+            //If the input is correct, the distance function will have a length of 3 followed by a space and then K. Therefore the condition should be met, if not met the input is incorrect.
             return -1;
         }
         //Dividing the message into variables according to the order in which they are supposed to be:
@@ -186,7 +186,7 @@ int Client::checkFromUser(string message){
 
 }
 
-/*int main(int argc, char* argv[]) {
+int main(int argc, char* argv[]) {
     // Receiving the ip and port arguments and checking their correctness:
 
     Client myClient = Client(argv[1], stoi(argv[2]));
@@ -209,4 +209,3 @@ int Client::checkFromUser(string message){
         }
     }
 }
-*/
