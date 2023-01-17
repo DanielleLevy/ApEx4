@@ -6,13 +6,17 @@
 
 
  void UploadCSV::execute(SharedState* sharedState) {
+    vector<Sample>tempTrain;
+    vector<Sample>tempTest;
      string trainFile, testFile;
+     int flagTrain=0,flagTest=0;
      dio->write("Please upload your local train CSV file.\n");
      trainFile=dio->read();
 
-     sharedState->dbTrain = readFromFile(trainFile,0);
-     if (sharedState->dbTrain.empty()) {
+     tempTrain = readFromFile(trainFile,0);
+     if (tempTrain.empty()) {
          dio->write("Invalid input\n");
+         flagTrain=-1;
          return;
      }
 
@@ -20,15 +24,19 @@
 
      dio->write("Please upload your local test CSV file.\n");
      testFile=dio->read();
-    sharedState->dbTest = readFromFile(testFile,1);
-     if (sharedState->dbTest.empty()) {
+     tempTest = readFromFile(testFile,1);
+     if (tempTest.empty()) {
          dio->write("Invalid input");
+         flagTest=-1;
          return;
      }
 
      dio->write("Upload complete.\n");
-     // use the trainSamples and testSamples vectors to train and test the classifier
-     sharedState->isUpload= true;
+     if(flagTest==0&&flagTest==0){
+         sharedState->dbTrain=tempTrain;
+         sharedState->dbTest=tempTest;
+         sharedState->isUpload= true;
+     }
 
 }
 
@@ -191,6 +199,5 @@ void DownlandResult::execute(SharedState* sharedState) {
 
 
 void Exit::execute(SharedState* sharedState) {
-    exit(0);
 }
 

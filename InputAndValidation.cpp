@@ -15,7 +15,7 @@ vector<Sample> readFromFile(string fileName,int flag){
     vector<string> row; //A vector that holds each line in the file.
     vector<double> detail; //A vector that will hold the numbers for each example.
     string line, word,label="";
-    int size, startSize,counter=0;
+    int size, startSize,counter=0,sizeForLoop;
     string nameFile=fileName;
     fstream file (nameFile, ios::in);
     if(file.is_open())
@@ -35,6 +35,7 @@ vector<Sample> readFromFile(string fileName,int flag){
             }
             else{
                 size=row.size();
+                sizeForLoop=size;
             }
             if(counter==0){
                 //Checks if this is the first vector, if so saves its size and compares it with the size of all the other vectors in the file.
@@ -47,8 +48,9 @@ vector<Sample> readFromFile(string fileName,int flag){
             }
             if (flag==0){
                 label=row.back();   //Saves the label.
+                sizeForLoop=row.size()-1;
             }
-            for (int i=0;i<row.size()-1;i++){
+            for (int i=0;i<sizeForLoop;i++){
                 //Converts the vector from a string to double.
                 try{
                     //input check if its contains string

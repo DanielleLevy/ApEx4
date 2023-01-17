@@ -24,23 +24,18 @@ public:
     StandardIO();
     void write(string text) override ;
     string read() override;
-//    void write(float f) override;
-//    void read(float* f)  override;
+};
+class SocketIO : public DefaultIO {
+   int clientID;
+public:
+
+    SocketIO(int clientID):clientID(clientID){}
+
+    virtual string read();
+    virtual void write(string text);
+    virtual void write(float f);
 
 };
-//class SocketIO : public DefaultIO {
-//    int clientID;
-//public:
-//
-//    SocketIO(int clientID):clientID(clientID){}
-//
-//    virtual string read();
-//    virtual void write(string text);
-//    virtual void write(float f);
-
-//    virtual void read(float* f);
-
-//};
 
 
 

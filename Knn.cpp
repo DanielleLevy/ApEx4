@@ -33,7 +33,7 @@ string Knn::findTheLabel (vector<double> vectorFromUser){
     for (int i=0; i<theDb.size();i++){
         double distance2 = 0;
         Distance distance1(typeDistance);
-        distance2 = distance1.calc(theVectorFromUser, theDb[i].deatils);
+        distance2 = distance1.calc(vectorFromUser, theDb[i].deatils);
         allTheDistances.push_back(make_pair(distance2, theDb[i]));
     }
 
