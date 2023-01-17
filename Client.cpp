@@ -186,10 +186,10 @@ int Client::checkFromUser(string message){
 
 }
 
-/*int main(int argc, char* argv[]) {
+int main(int argc, char* argv[]) {
     // Receiving the ip and port arguments and checking their correctness:
 
-    Client myClient = Client(argv[1], stoi(argv[2]));
+    Client myClient = Client("127.0.0.1", 55555);
     if (!myClient.checkingIp()) {
         cout << "invalid input";
         exit(0);
@@ -209,4 +209,3 @@ int Client::checkFromUser(string message){
         }
     }
 }
-*/
