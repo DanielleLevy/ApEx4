@@ -25,6 +25,7 @@ void CLI::start() {
         }
         dio->write("8.");
         dio->write(commandsToExe[5]->description + "\n");
+        dio->write("DanielOrYouDone");
         string input = dio->read();
         index = input[0] - '0' - 1;
         if ((index >= 0 && index <= 4) || index == 7) {
@@ -33,7 +34,6 @@ void CLI::start() {
             }
             commandsToExe[index]->execute(&sharedState);
         }
-
     }
 }
 

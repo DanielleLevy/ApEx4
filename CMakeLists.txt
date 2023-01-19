@@ -15,3 +15,13 @@ add_executable(Server
         CLI.cpp
         Command.cpp)
 target_link_libraries(Server ${CMAKE_THREAD_LIBS_INIT})
+
+add_executable(Client
+        Distance.cpp
+        Sample.cpp
+        InputAndValidation.cpp
+        Knn.cpp
+        Client.cpp
+        DefaultIO.cpp
+        CLI.cpp
+        Command.cpp)

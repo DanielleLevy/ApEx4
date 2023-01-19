@@ -18,14 +18,25 @@ string StandardIO::read(){
 }
 
 
-string SocketIO::read(){
-    char c=0;
-    size_t i=0;
-    string s="";
-    while(c!='\n'){
-        recv(clientID,&c,sizeof(char),0);
-        s+=c;
-    }
+ string SocketIO::read(){
+     char c=0;
+     string s="";
+     char buffer [4096];
+     int expectedDatalen = sizeof(buffer);
+     bzero(buffer, expectedDatalen);
+     int readBytes=recv(clientID, buffer, sizeof(buffer), 0);
+     if (readBytes <= 0) {
+         return s;
+     } else {
+         for (int i = 0; i < expectedDatalen; i++) {
+             c = buffer[i];
+             if (c == '\000') {
+                 break;
+             } else {
+                 s += c;
+             }
+         }
+     }
     return s;
 }
 void SocketIO::write(string text){

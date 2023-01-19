@@ -11,8 +11,8 @@
      string trainFile, testFile;
      int flagTrain=0,flagTest=0;
      dio->write("Please upload your local train CSV file.\n");
+     dio->write("DanielOrYouDone");
      trainFile=dio->read();
-
      tempTrain = readFromFile(trainFile,0);
      if (tempTrain.empty()) {
          dio->write("Invalid input\n");
@@ -21,8 +21,8 @@
      }
 
      dio->write("Upload complete.\n");
-
      dio->write("Please upload your local test CSV file.\n");
+     dio->write("DanielOrYouDone");
      testFile=dio->read();
      tempTest = readFromFile(testFile,1);
      if (tempTest.empty()) {
@@ -113,8 +113,9 @@ void Setting::execute(SharedState* sharedState) {
     int k = sharedState->k;
     string distanceM = sharedState->distanceM;
     dio->write("The current KNN parameters are: K = " + std::to_string(k) +  ", distance metric = " + distanceM+"\n");
+    dio->write("DanielOrYouDone");
     string input = dio->read();
-    if (input != "") {
+    if (input!="") {
         checkP= checkKandM(sharedState, input);
         if(checkP<0){
             if(checkP==-1){
@@ -174,26 +175,15 @@ void DownlandResult::execute(SharedState* sharedState) {
     }
     string fileName;
     dio->write("Please enter a path to create the file locally.\n");
-    fileName = dio->read();
-
-    // Open the file for writing
-    std::ofstream out(fileName);
-    if (!out) {
-        dio->write("Error: Could not open file for writing.\n");
-        return;
-    }
+    dio->write("DanielOrYouDone");
 
     // Write the results to the file
-    vector<string> results;
+    string results="";
     for (int i = 0; i < sharedState->dbTest.size(); i++) {
-        results.push_back(to_string(i + 1) + " " + sharedState->dbTest[i].label);
+        results=results+(to_string(i + 1) + " " + sharedState->dbTest[i].label+"\n");
     }
-    results.push_back("Done.");
-    for (auto &result: results) {
-        out << result << std::endl;
-    }
-
-    out.close();
+    results=results+"Done.DanielOrDoneWriteToFile";
+    dio->write(results);
 
 }
 

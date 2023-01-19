@@ -15,6 +15,11 @@
 #include "Sample.h"
 #include "Knn.h"
 #include "Header.h"
+#include <thread>
+#include "Header.h"
+#include <threads.h>
+#include "thread"
+#include "pthread.h"
 using namespace std;
 
 
@@ -30,6 +35,8 @@ public:
     int initClient();
     int handleServerClient();
     Client(char * ip, int port);
+
+    void writeToFile(string contents, string fileName);
 };
 
 
