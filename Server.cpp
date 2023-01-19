@@ -36,48 +36,48 @@ int Server:: initServer(){/*
     return 0;
 
 }
-
-
-
-void Server::start(ClientHandler& ch)throw(const char*){
-    t=new thread([&ch,this](){
-        while(!stopped){
-            socklen_t clientSize=sizeof(client);
-            int aClient = accept(sockFD,(struct sockaddr*)&client,&clientSize);
-            if(aClient>0){
-                ch.handle(aClient);
-                close(aClient);
-            }
-
+int Server::handleClientServer() {
+    ClientHandler* clientHandler = new ManagerClients();
+    if (listen(sockFD, 5) < 0) {
+        cout << "error listening to a socket" << endl;
+        return -1;
+    }
+    struct sockaddr_in client_sin;
+    unsigned int addr_len = sizeof(client_sin);
+    while (!stopped) {
+        int clientSock = accept(sockFD, (struct sockaddr *) &client_sin, &addr_len);
+        if (clientSock < 0) {
+            cout << "error accepting client" << endl;
+        } else {
+            // Create a new thread to handle the client
+            std::thread t(&Server::handleClient, this, clientSock, clientHandler);
+            t.detach();
         }
-        close(sockFD);
-    });
+    }
+    delete clientHandler;
 }
 
-void Server::stop(){
-    stopped=true;
-    t->join(); // do not delete this!
+void Server::handleClient(int clientSock, ClientHandler* clientHandler) {
+    clientHandler->handle(clientSock);
+    close(clientSock);
 }
+
 
 Server::~Server() {
     // TODO Auto-generated destructor stub
 }
 
-int main(int argc, char *argv[]){
 
+int main(int argc, char *argv[]){
     int port=55555;
     Server myServer=Server(port);
     int initAns=myServer.initServer();
     if (initAns==0){
         //check if the server init well
-       while (true){
-           ClientHandler* clientHandler=new ManagerClients();
-           myServer.start(reinterpret_cast<ClientHandler &>(clientHandler));
-
-       }
+        myServer.handleClientServer();
     }
-
 }
+
 
 
 
