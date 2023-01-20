@@ -17,7 +17,6 @@
 #include "Header.h"
 #include <thread>
 #include "Header.h"
-#include <threads.h>
 #include "thread"
 #include "pthread.h"
 using namespace std;
