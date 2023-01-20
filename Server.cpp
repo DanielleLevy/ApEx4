@@ -50,7 +50,7 @@ int Server::handleClientServer() {
             cout << "error accepting client" << endl;
         } else {
             // Create a new thread to handle the client
-            thread t(&Server::handleClient, this, clientSock, clientHandler);
+            std::thread t(&Server::handleClient, this, clientSock, clientHandler);
             t.detach();
         }
     }
