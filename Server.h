@@ -15,7 +15,6 @@
 #include "Sample.h"
 #include "Knn.h"
 #include "Header.h"
-#include <threads.h>
 #include "thread"
 #include "pthread.h"
 #include "DefaultIO.h"
