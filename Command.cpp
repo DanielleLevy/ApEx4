@@ -8,23 +8,41 @@
  void UploadCSV::execute(SharedState* sharedState) {
     vector<Sample>tempTrain;
     vector<Sample>tempTest;
-     string trainFile, testFile;
+     string trainFile="", testFile="",tempTrainFile,tempTestFile;
      int flagTrain=0,flagTest=0;
-     dio->write("Please upload your local train CSV file.\n");
-     dio->write("DanielOrYouDone");
-     trainFile=dio->read();
-     tempTrain = readFromFile(trainFile,0);
+     dio->write("DanielOrItsCommandOne");
+     while(true){
+         tempTrainFile=dio->readFile();
+         trainFile=trainFile+tempTrainFile;
+         if(trainFile.find("DanielOrFileDone") != string::npos){
+             size_t pos = trainFile.find("DanielOrFileDone");
+             trainFile=trainFile.substr(0,pos);
+             break;
+         }
+     }
+     ofstream trainStream("train.csv");
+     trainStream << trainFile;
+     trainStream.close();
+     tempTrain = readFromFile("train.csv",0);
      if (tempTrain.empty()) {
          dio->write("Invalid input\n");
          flagTrain=-1;
          return;
      }
-
      dio->write("Upload complete.\n");
-     dio->write("Please upload your local test CSV file.\n");
-     dio->write("DanielOrYouDone");
-     testFile=dio->read();
-     tempTest = readFromFile(testFile,1);
+     while(true){
+         tempTestFile=dio->readFile();
+         testFile=testFile+tempTestFile;
+         if(testFile.find("DanielOrFileDone") != string::npos){
+             size_t pos = testFile.find("DanielOrFileDone");
+             testFile=testFile.substr(0,pos);
+             break;
+         }
+     }
+     ofstream testStream("test.csv");
+     testStream << testFile;
+     testStream.close();
+     tempTest = readFromFile("test.csv",1);
      if (tempTest.empty()) {
          dio->write("Invalid input");
          flagTest=-1;
@@ -32,7 +50,7 @@
      }
 
      dio->write("Upload complete.\n");
-     if(flagTest==0&&flagTest==0){
+     if(flagTest==0&&flagTrain==0){
          sharedState->dbTrain=tempTrain;
          sharedState->dbTest=tempTest;
          sharedState->isUpload= true;
@@ -174,9 +192,6 @@ void DownlandResult::execute(SharedState* sharedState) {
         return;
     }
     string fileName;
-    dio->write("Please enter a path to create the file locally.\n");
-    dio->write("DanielOrYouDone");
-
     // Write the results to the file
     string results="";
     for (int i = 0; i < sharedState->dbTest.size(); i++) {

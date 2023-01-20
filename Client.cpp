@@ -17,45 +17,98 @@ Client::Client(char * ip, int port) {
 
 
 int Client::handleServerClient () {
-    int flag = 0;
+    int flagIfCommand8 = 0;
     char buffer[4096];
     int expectedDatalen = sizeof(buffer);
-    string inputFromUser,fileName;
-    while (flag == 0) {
+    string inputFromUser,fileName,writeToFile,writeToUser,trainFile,testFile;
+    while (flagIfCommand8 == 0) {
+        writeToUser="";
         while (true) {
             bzero(buffer, expectedDatalen);
-            int readBytes = recv(sockFD, buffer, sizeof(buffer), 0);
+            int readBytes = recv(sockFD, buffer, sizeof(buffer)-1, 0);
             if (readBytes == 0) {
-                flag = -1;
+                flagIfCommand8 = -1;
                 break;
             } else if (readBytes < 0) {
                 return -1;
             } else {
                 string bufferString(buffer);
-                if (bufferString.find("DanielOrYouDone") != string::npos) {
-                    size_t pos = bufferString.find("DanielOrYouDone");
-                    string substring = bufferString.substr(0, pos);
-                    cout << substring;
-                    break;
-                }
-                if (bufferString.find("DanielOrDoneWriteToFile") != string::npos) {
-                    size_t pos = bufferString.find("DanielOrDoneWriteToFile");
-                    string substring = bufferString.substr(0, pos);
+                writeToUser=writeToUser+bufferString;
+                if (writeToUser.find("DanielOrItsCommandOne") != string::npos) {
+                    writeToUser="";
+                     // Read the train file from the local filesystem
+                     cout << "Please enter the path of your local train CSV file:\n";
+                     getline(cin, trainFile);
+                     ifstream trainStream(trainFile);
+                     stringstream trainBuffer;
+                     trainBuffer << trainStream.rdbuf();
+                     string trainContent = trainBuffer.str();
+                     // Send the train file contents to the server
+                     trainContent=trainContent+"DanielOrFileDone";
+                     int sentBytes = send(sockFD, trainContent.c_str(), trainContent.length(), 0);
+                     if (sentBytes > 0) {
+                         bzero(buffer, expectedDatalen);
+                         // Read the test file from the local filesystem
+                         int readBytes = recv(sockFD, buffer, sizeof(buffer)-1, 0);
+                         if(readBytes>0){
+                             cout<<string (buffer);
+                             bzero(buffer, expectedDatalen);
+                         }
+                         else{
+                             break;
+                         }
+                         cout<<"Please enter the path of your local test CSV file:\n";
+                         getline(cin, testFile);
+                         ifstream testStream(testFile);
+                         stringstream testBuffer;
+                         testBuffer << testStream.rdbuf();
+                         string testContent = testBuffer.str();
+                         testContent=testContent+"DanielOrFileDone";
+                         // Send the test file contents to the server
+                         int sentBytes = send(sockFD, testContent.c_str(), testContent.length(), 0);
+                         if(sentBytes<0) {
+                             break;
+                         } else{
+                             int readBytes = recv(sockFD, buffer, sizeof(buffer)-1, 0);
+                             if(readBytes>0)
+                             {
+                                 cout<<string (buffer);
+                                 bzero(buffer, expectedDatalen);
+
+                             }
+                         }
+                     }
+                 }
+                 else if (writeToUser.find("DanielOrDoneWriteToFile") != string::npos&&writeToUser.find("DanielOrYouDone") != string::npos) {
+                    size_t pos = writeToUser.find("DanielOrDoneWriteToFile");
+                    writeToFile = writeToUser.substr(0, pos);
+                    size_t postoDonePrint = writeToUser.find("DanielOrYouDone");
+                    writeToUser= writeToUser.substr(pos+23,postoDonePrint-pos-23);
                     cout<<"Please enter a path to create the file locally.\n";
                     getline(cin,fileName);
                     // Create a new thread to handle the file writing
-                    std::thread t(&Client::writeToFile, this, substring, fileName);
+                    thread t(&Client::writeToFile, this, writeToFile, fileName);
                     t.detach();
-                } else{
-                    cout << bufferString;
+                    break;
                 }
+                else if (writeToUser.find("DanielOrYouDone") != string::npos) {
+                    size_t pos = writeToUser.find("DanielOrYouDone");
+                    writeToUser = writeToUser.substr(0, pos);
+                    break;
+                }
+
             }
         }
-        if (flag == -1) {
+
+        cout<<writeToUser;
+        writeToUser="";
+
+        if (flagIfCommand8 == -1) {
             break;
         }
         // Receives input from the user and checks it. If it is normal then the mount should be 0:
         getline(cin, inputFromUser);
+        inputFromUser=inputFromUser+"D";
         int sentBytes = send(sockFD, inputFromUser.c_str(), inputFromUser.length(), 0);
         if (sentBytes < 0) {
             return -1;

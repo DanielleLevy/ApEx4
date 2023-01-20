@@ -64,6 +64,7 @@ public:
     void stop();
     void start(ClientHandler& ch)throw(const char*);
 
+    void handleClient(int clientSock, ClientHandler *clientHandler);
 };
 
 

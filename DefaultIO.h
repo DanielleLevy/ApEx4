@@ -14,27 +14,27 @@ class DefaultIO {
 public:
     virtual string read()=0;
     virtual void write(string text)=0;
-//    virtual void write(float f)=0;
-//    virtual void read(float* f)=0;
+    virtual string readFile();
     virtual ~DefaultIO(){}
+
 };
 
-class StandardIO : public DefaultIO {
+/*class StandardIO : public DefaultIO {
 public:
     StandardIO();
     void write(string text) override ;
     string read() override;
-};
+    string readFile() ;
+
+};*/
 class SocketIO : public DefaultIO {
    int clientID;
 public:
 
     SocketIO(int clientID):clientID(clientID){}
-
     virtual string read();
     virtual void write(string text);
-    virtual void write(float f);
-
+    string readFile() ;
 };
 
 

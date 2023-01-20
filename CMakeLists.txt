@@ -16,6 +16,7 @@ add_executable(Server
         Command.cpp)
 target_link_libraries(Server ${CMAKE_THREAD_LIBS_INIT})
 
+
 add_executable(Client
         Distance.cpp
         Sample.cpp
@@ -25,3 +26,4 @@ add_executable(Client
         DefaultIO.cpp
         CLI.cpp
         Command.cpp)
+target_link_libraries(Client ${CMAKE_THREAD_LIBS_INIT})

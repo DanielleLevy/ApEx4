@@ -14,18 +14,20 @@ CLI::CLI(DefaultIO* dio) {
 
 void CLI::start() {
     SharedState sharedState;
+    string menu;
     int index = -1;
     while (index != 5) {
-        dio->write("Welcome to the KNN Classifier Server. Please choose an option:\n");
+        menu="Welcome to the KNN Classifier Server. Please choose an option:\n";
         for (size_t i = 0; i < commandsToExe.size() - 1; i++) {
             string s("1.");
             s[0] = ((char) (i + 1 + '0'));
-            dio->write(s);
-            dio->write(commandsToExe[i]->description + "\n");
+            menu=menu+s;
+            menu=menu+commandsToExe[i]->description + "\n";
         }
-        dio->write("8.");
-        dio->write(commandsToExe[5]->description + "\n");
-        dio->write("DanielOrYouDone");
+        menu=menu+"8.";
+        menu=menu+commandsToExe[5]->description + "\n";
+        menu=menu+"DanielOrYouDone";
+        dio->write(menu);
         string input = dio->read();
         index = input[0] - '0' - 1;
         if ((index >= 0 && index <= 4) || index == 7) {

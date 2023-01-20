@@ -4,7 +4,7 @@
 
 #include "DefaultIO.h"
 
-StandardIO::StandardIO()
+/*StandardIO::StandardIO()
 {}
 
 
@@ -17,14 +17,33 @@ string StandardIO::read(){
     return s;
 }
 
+string StandardIO::readFile(){
+    string s;
+    getline(cin, s);
+    return s;
+}*/
 
- string SocketIO::read(){
+string SocketIO::read(){
+    char buffer [4096];
+    int expectedDatalen = sizeof(buffer);
+    bzero(buffer, expectedDatalen);
+    if (recv(clientID, buffer, sizeof(buffer)-1, 0)) {
+        string answer=string(buffer);
+        answer=answer.substr(0,answer.find("D"));
+        return answer;
+    } else {
+        return "";
+    }
+}
+
+
+ string SocketIO::readFile(){
      char c=0;
      string s="";
      char buffer [4096];
      int expectedDatalen = sizeof(buffer);
      bzero(buffer, expectedDatalen);
-     int readBytes=recv(clientID, buffer, sizeof(buffer), 0);
+     int readBytes=recv(clientID, buffer, sizeof(buffer)-1, 0);
      if (readBytes <= 0) {
          return s;
      } else {
@@ -44,9 +63,3 @@ void SocketIO::write(string text){
     send(clientID,txt,strlen(txt),0);
 }
 
-void SocketIO::write(float f){
-    ostringstream ss;
-    ss <<f;
-    string s(ss.str());
-    write(s);
-}
