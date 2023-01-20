@@ -46,7 +46,7 @@ void CLI::start() {/*
             //the number should be 1-5 or 8
             dio->write("invalid input\n");
         } else {
-            index = input[2] - '0' - 1;
+            index = input[0] - '0' - 1;
             if ((index >= 0 && index <= 4) || index == 7) {
                 if (index == 7) {
                     index = 5;

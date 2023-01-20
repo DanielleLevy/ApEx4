@@ -8,6 +8,7 @@ client.out: Client.o Sample.o InputAndValidation.o Distance.o Knn.o CLI.o Comman
 
 CLI.o:
 	g++ -std=c++11 -c CLI.cpp CLI.h
+
 Client.o:
 	g++ -std=c++11 -c Client.cpp Client.h
 

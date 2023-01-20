@@ -64,7 +64,6 @@ void Server::handleClient(int clientSock, ClientHandler* clientHandler) {
 
 
 Server::~Server() {
-    // TODO Auto-generated destructor stub
 }
 
 

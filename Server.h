@@ -15,7 +15,6 @@
 #include "Sample.h"
 #include "Knn.h"
 #include "Header.h"
-#include <threads.h>
 #include "thread"
 #include "pthread.h"
 #include "DefaultIO.h"
@@ -61,8 +60,6 @@ public:
     int initServer();
     int handleClientServer();
     virtual ~Server();
-    void stop();
-    void start(ClientHandler& ch)throw(const char*);
 
     void handleClient(int clientSock, ClientHandler *clientHandler);
 };
