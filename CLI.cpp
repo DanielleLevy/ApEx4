@@ -1,8 +1,17 @@
 
 
 #include "CLI.h"
-
-CLI::CLI(DefaultIO* dio) {
+/*This code defines a Command Line Interface (CLI) class for a K-Nearest Neighbors (KNN) classifier server.*/
+CLI::CLI(DefaultIO* dio) {/*
+ * The CLI constructor takes a DefaultIO object as input and uses it to initialize a vector of command objects.
+ * These command objects include:
+ * UploadCSV: for uploading a CSV file
+ * Setting: for setting various parameters for the KNN classifier
+ * Classify: for running the classification on the uploaded data
+ * DisplayResult: for displaying the classification results
+ * DownlandResult: for downloading the classification results
+ * Exit: for exiting the CLI
+ */
     this->dio=dio;
     commandsToExe.push_back(new UploadCSV(dio));
     commandsToExe.push_back(new Setting(dio));
@@ -12,7 +21,11 @@ CLI::CLI(DefaultIO* dio) {
     commandsToExe.push_back(new Exit(dio));
 }
 
-void CLI::start() {
+void CLI::start() {/*
+ * The start() method of the CLI class is used to start the CLI.
+ * It displays a menu of options to the user, reads their input, and then executes the corresponding command.
+ * The SharedState class is used to share data between different commands.
+ */
     SharedState sharedState;
     string menu;
     int index = -1;
@@ -26,10 +39,11 @@ void CLI::start() {
         }
         menu = menu + "8.";
         menu = menu + commandsToExe[5]->description + "\n";
-        menu = menu + "DanielOrYouDone";
+        menu = menu + "DanielOrYouDone"; //end string- sign the the client receive all the information.
         dio->write(menu);
         string input = dio->read();
         if (input.size() > 1) {
+            //the number should be 1-5 or 8
             dio->write("invalid input\n");
         } else {
             index = input[2] - '0' - 1;
@@ -46,6 +60,7 @@ void CLI::start() {
 }
 
 CLI::~CLI() {
+    //The ~CLI() destructor is used to free up the memory allocated for the command objects.
     for(size_t i=0;i<commandsToExe.size();i++){
         if(commandsToExe[i]!=nullptr)
             delete commandsToExe[i];
@@ -54,10 +69,3 @@ CLI::~CLI() {
 
 
 
-/*int main(int argc, char *argv[]){
-    DefaultIO* sio  = new StandardIO;
-    CLI cli(sio);
-    cli.start();
-
-
-}*/
