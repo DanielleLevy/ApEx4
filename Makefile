@@ -1,13 +1,10 @@
 all: server.out client.out
 
-server.out: Server.o Sample.o InputAndValidation.o Distance.o Knn.o
-	g++ -std=c++11 Server.o Sample.o InputAndValidation.o Distance.o Knn.o -o server.out
+server.out: Server.o Sample.o InputAndValidation.o Distance.o Knn.o Command.o CLI.o DefaultIO.o
+	g++ -std=c++11 Server.o Sample.o InputAndValidation.o Distance.o Knn.o  DefaultIO.o CLI.o Command.o -o server.out
 
-client.out: Client.o Sample.o InputAndValidation.o Distance.o Knn.o
-	g++ -std=c++11 Client.o Sample.o InputAndValidation.o Distance.o Knn.o DefaultIO.o -o client.out
-CLI.out: CLI.o Sample.o InputAndValidation.o Distance.o Knn.o Command.o
-	g++ -std=c++11 CLI.o Sample.o InputAndValidation.o Distance.o Knn.o Command.o DefaultIO.o -o CLI.out
-
+client.out: Client.o Sample.o InputAndValidation.o Distance.o Knn.o CLI.o Command.o DefaultIO.o
+	g++ -std=c++11 Client.o Sample.o InputAndValidation.o Distance.o Knn.o DefaultIO.o CLI.o Command.o -o client.out
 
 CLI.o:
 	g++ -std=c++11 -c CLI.cpp CLI.h
