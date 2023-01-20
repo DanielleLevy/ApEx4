@@ -69,7 +69,18 @@ Server::~Server() {
 
 
 int main(int argc, char *argv[]){
-    int port=55555;
+    int port;
+    try{
+        port= stoi(argv[1]); //Converting the port to a number
+    }
+    catch(...) {
+        // Invalid port
+        cout<<"invalid input"<<endl;
+    }
+    if(port<1024 || port>65535){
+        //Checking whether the port is within range
+        cout<<"invalid input"<<endl;
+    }
     Server myServer=Server(port);
     int initAns=myServer.initServer();
     if (initAns==0){

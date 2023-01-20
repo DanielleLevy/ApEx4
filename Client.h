@@ -35,7 +35,6 @@ public:
     int initClient();
     int handleServerClient();
     Client(char * ip, int port);
-
     void writeToFile(string contents, string fileName);
 };
 
