@@ -17,24 +17,30 @@ void CLI::start() {
     string menu;
     int index = -1;
     while (index != 5) {
-        menu="Welcome to the KNN Classifier Server. Please choose an option:\n";
+        menu = "Welcome to the KNN Classifier Server. Please choose an option:\n";
         for (size_t i = 0; i < commandsToExe.size() - 1; i++) {
             string s("1.");
             s[0] = ((char) (i + 1 + '0'));
-            menu=menu+s;
-            menu=menu+commandsToExe[i]->description + "\n";
+            menu = menu + s;
+            menu = menu + commandsToExe[i]->description + "\n";
         }
-        menu=menu+"8.";
-        menu=menu+commandsToExe[5]->description + "\n";
-        menu=menu+"DanielOrYouDone";
+        menu = menu + "8.";
+        menu = menu + commandsToExe[5]->description + "\n";
+        menu = menu + "DanielOrYouDone";
         dio->write(menu);
         string input = dio->read();
-        index = input[0] - '0' - 1;
-        if ((index >= 0 && index <= 4) || index == 7) {
-            if (index == 7) {
-                index = 5;
+        if (input.size() > 1) {
+            dio->write("invalid input\n");
+        } else {
+            index = input[2] - '0' - 1;
+            if ((index >= 0 && index <= 4) || index == 7) {
+                if (index == 7) {
+                    index = 5;
+                }
+                commandsToExe[index]->execute(&sharedState);
+            } else {
+                dio->write("invalid input\n");
             }
-            commandsToExe[index]->execute(&sharedState);
         }
     }
 }
