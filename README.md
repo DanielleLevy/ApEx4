@@ -2,7 +2,7 @@
 ## How to compile:
 write the following in the terminal , after each one press enter:
 
-1. git@github.com:DanielleLevy/ApEx4.git
+1. git clone git@github.com:DanielleLevy/ApEx4.git
 2. cd ApEx4
 3. make
 
