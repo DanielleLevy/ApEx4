@@ -55,6 +55,7 @@ int Server::handleClientServer() {
         }
     }
     delete clientHandler;
+    return 0;
 }
 
 void Server::handleClient(int clientSock, ClientHandler* clientHandler) {
