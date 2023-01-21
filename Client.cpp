@@ -67,7 +67,7 @@ bool Client::checkingPort(){
 
 
 int Client::handleServerClient () {
-    int flagIfCommand8 = 0;
+    int flagIfCommand8 = 0,flagInvalid=-1;
     char buffer[4096];
     int expectedDatalen = sizeof(buffer);
     string inputFromUser,fileName,writeToFile,writeToUser,trainFile,testFile;
@@ -101,30 +101,34 @@ int Client::handleServerClient () {
                         // Read the test file from the local filesystem
                         int readBytes = recv(sockFD, buffer, sizeof(buffer)-1, 0);
                         if(readBytes>0){
-                            cout<<string (buffer);
+                            if(string(buffer).find("invalid input")){
+                                flagInvalid=0;
+                            }
+                            cout<<string(buffer);
                             bzero(buffer, expectedDatalen);
                         }
                         else{
-                            break;
+                            exit(0);
                         }
-                        cout<<"Please enter the path of your local test CSV file:\n";
-                        getline(cin, testFile);
-                        ifstream testStream(testFile);
-                        stringstream testBuffer;
-                        testBuffer << testStream.rdbuf();
-                        string testContent = testBuffer.str();
-                        testContent=testContent+"DanielOrFileDone";
-                        // Send the test file contents to the server
-                        int sentBytes = send(sockFD, testContent.c_str(), testContent.length(), 0);
-                        if(sentBytes<0) {
-                            break;
-                        } else{
-                            int readBytes = recv(sockFD, buffer, sizeof(buffer)-1, 0);
-                            if(readBytes>0)
-                            {
-                                cout<<string (buffer);
-                                bzero(buffer, expectedDatalen);
+                        if(flagInvalid==-1) {
+                            cout << "Please enter the path of your local test CSV file:\n";
+                            getline(cin, testFile);
+                            ifstream testStream(testFile);
+                            stringstream testBuffer;
+                            testBuffer << testStream.rdbuf();
+                            string testContent = testBuffer.str();
+                            testContent = testContent + "DanielOrFileDone";
+                            // Send the test file contents to the server
+                            int sentBytes = send(sockFD, testContent.c_str(), testContent.length(), 0);
+                            if (sentBytes < 0) {
+                                exit(0);
+                            } else {
+                                int readBytes = recv(sockFD, buffer, sizeof(buffer) - 1, 0);
+                                if (readBytes > 0) {
+                                    cout << string(buffer);
+                                    bzero(buffer, expectedDatalen);
 
+                                }
                             }
                         }
                     }
