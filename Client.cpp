@@ -106,13 +106,14 @@ int Client::handleServerClient () {
                             if(messegeFromCLI.find("Invalid input") != string::npos){
                                 flagInvalid=0;
                                 cout<<messegeFromCLI.substr(0,messegeFromCLI.find("DanielOrYouDone"));
+                                bzero(buffer, expectedDatalen);
                                 break;
                             }
                             cout<<messegeFromCLI;
                             bzero(buffer, expectedDatalen);
                         }
                         else{
-                            exit(0);
+                            return -1;
                         }
                         if(flagInvalid==-1) {
                             cout << "Please enter the path of your local test CSV file:\n";
@@ -125,7 +126,7 @@ int Client::handleServerClient () {
                             // Send the test file contents to the server
                             int sentBytes = send(sockFD, testContent.c_str(), testContent.length(), 0);
                             if (sentBytes < 0) {
-                                exit(0);
+                                return -1;
                             } else {
                                 int readBytes = recv(sockFD, buffer, sizeof(buffer) - 1, 0);
                                 if (readBytes > 0) {
