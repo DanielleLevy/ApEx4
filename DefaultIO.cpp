@@ -40,16 +40,16 @@ string SocketIO::read(){
  string SocketIO::readFile(){
      char c=0;
      string s="";
-     char buffer [4096];
+     char buffer [4096]={0};
      int expectedDatalen = sizeof(buffer);
      bzero(buffer, expectedDatalen);
-     int readBytes=recv(clientID, buffer, sizeof(buffer)-1, 0);
+     int readBytes=recv(clientID, buffer, expectedDatalen-1, 0);
      if (readBytes <= 0) {
          return s;
      } else {
-         for (int i = 0; i < expectedDatalen; i++) {
+         for (int i = 0; i < expectedDatalen-1; i++) {
              c = buffer[i];
-             if (c == '\000') {
+             if (c == '\0') {
                  break;
              } else {
                  s += c;
