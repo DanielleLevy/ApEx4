@@ -132,7 +132,7 @@ int Client::handleServerClient () {
                                 if (readBytes > 0) {
                                     cout << string(buffer);
                                     bzero(buffer, expectedDatalen);
-
+                                    break;
                                 }
                             }
                         }
@@ -158,15 +158,17 @@ int Client::handleServerClient () {
 
             }
         }
-
+        cout << std::to_string(__LINE__) << endl;
         cout<<writeToUser;
         writeToUser="";
-
+        cout << std::to_string(__LINE__) << endl;
         if (flagIfCommand8 == -1) {
             break;
         }
+        cout << std::to_string(__LINE__) << endl;
         // Receives input from the user and checks it. If it is normal then the mount should be 0:
         getline(cin, inputFromUser);
+        cout << std::to_string(__LINE__) << endl;
         inputFromUser=inputFromUser+"D";
         cout<<"BEFORE\n";
         int sentBytes = send(sockFD, inputFromUser.c_str(), inputFromUser.length(), 0);
