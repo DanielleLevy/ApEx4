@@ -101,11 +101,14 @@ int Client::handleServerClient () {
                         bzero(buffer, expectedDatalen);
                         // Read the test file from the local filesystem
                         int readBytes = recv(sockFD, buffer, sizeof(buffer)-1, 0);
+                        string messegeFromCLI=string(buffer);
                         if(readBytes>0){
-                            if(string(buffer).find("invalid input")!=string::npos){
+                            if(messegeFromCLI.find("Invalid input") != string::npos){
                                 flagInvalid=0;
+                                cout<<messegeFromCLI.substr(0,messegeFromCLI.find("DanielOrYouDone"));
+                                break;
                             }
-                            cout<<string(buffer);
+                            cout<<messegeFromCLI;
                             bzero(buffer, expectedDatalen);
                         }
                         else{

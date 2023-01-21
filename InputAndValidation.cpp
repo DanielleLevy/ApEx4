@@ -43,8 +43,6 @@ vector<Sample> readFromFile(string fileName,int flag){
             }
             if(startSize!=size){
                 //If a vector is found that does not match in size, the program prints an error and exits.
-                cout<<"The file contains vectors of different length, try another file."<<endl;
-                exit(0);
             }
             if (flag==0){
                 label=row.back();   //Saves the label.
@@ -58,8 +56,7 @@ vector<Sample> readFromFile(string fileName,int flag){
                     detail.push_back(value);
                 }
                 catch(...){
-                    cout<<"the vector should contain numbers only, try another file"<<endl;
-                    exit(0);
+                    return db;
                 }
             }
             //Generates an example and puts it in the examples vector.

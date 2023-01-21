@@ -44,7 +44,7 @@
      testStream.close();
      tempTest = readFromFile("test.csv",1);
      if (tempTest.empty()) {
-         dio->write("Invalid input");
+         dio->write("Invalid input\n");
          flagTest=-1;
          return;
      }
