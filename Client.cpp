@@ -67,11 +67,12 @@ bool Client::checkingPort(){
 
 
 int Client::handleServerClient () {
-    int flagIfCommand8 = 0,flagInvalid=-1;
+    int flagIfCommand8 = 0,flagInvalid;
     char buffer[4096];
     int expectedDatalen = sizeof(buffer);
     string inputFromUser,fileName,writeToFile,writeToUser,trainFile,testFile;
     while (flagIfCommand8 == 0) {
+        flagInvalid=-1;
         writeToUser="";
         while (true) {
             bzero(buffer, expectedDatalen);
