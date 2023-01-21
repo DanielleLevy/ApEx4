@@ -102,7 +102,7 @@ int Client::handleServerClient () {
                         // Read the test file from the local filesystem
                         int readBytes = recv(sockFD, buffer, sizeof(buffer)-1, 0);
                         if(readBytes>0){
-                            if(string(buffer).find("invalid input")){
+                            if(string(buffer).find("invalid input")!=string::npos){
                                 flagInvalid=0;
                             }
                             cout<<string(buffer);
