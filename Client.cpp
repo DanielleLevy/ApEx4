@@ -168,7 +168,9 @@ int Client::handleServerClient () {
         // Receives input from the user and checks it. If it is normal then the mount should be 0:
         getline(cin, inputFromUser);
         inputFromUser=inputFromUser+"D";
+        cout<<"BEFORE\n";
         int sentBytes = send(sockFD, inputFromUser.c_str(), inputFromUser.length(), 0);
+        cout<<"AFTER\n";
         if (sentBytes < 0) {
             return -1;
         }

@@ -41,7 +41,9 @@ void CLI::start() {/*
         menu = menu + commandsToExe[5]->description + "\n";
         menu = menu + "DanielOrYouDone"; //end string- sign the the client receive all the information.
         dio->write(menu);
+        cout<<"BEFORE\n";
         string input = dio->read();
+        cout<<"AFTER"<<endl;
         if (input.size() > 1) {
             //the number should be 1-5 or 8
             dio->write("invalid input\n");
