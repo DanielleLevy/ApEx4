@@ -137,7 +137,7 @@ int Client::handleServerClient () {
                         }
                     }
                 }
-                else if (writeToUser.find("DanielOrDoneWriteToFile") != string::npos&&writeToUser.find("DanielOrYouDone") != string::npos) {
+                 if (writeToUser.find("DanielOrDoneWriteToFile") != string::npos&&writeToUser.find("DanielOrYouDone") != string::npos) {
                     size_t pos = writeToUser.find("DanielOrDoneWriteToFile");
                     writeToFile = writeToUser.substr(0, pos);
                     size_t postoDonePrint = writeToUser.find("DanielOrYouDone");
@@ -149,7 +149,7 @@ int Client::handleServerClient () {
                     t.detach();
                     break;
                 }
-                else if (writeToUser.find("DanielOrYouDone") != string::npos) {
+                 if (writeToUser.find("DanielOrYouDone") != string::npos) {
                     size_t pos = writeToUser.find("DanielOrYouDone");
                     writeToUser = writeToUser.substr(0, pos);
                     break;
