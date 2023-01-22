@@ -6,12 +6,15 @@
 
 
  void UploadCSV::execute(SharedState* sharedState) {
+    // Temporarily store the data from the uploaded CSV files:
     vector<Sample>tempTrain;
     vector<Sample>tempTest;
+    // Prompts the user to upload two files, one called "Train.csv" and the other "Test.csv":
      string trainFile="", testFile="",tempTrainFile,tempTestFile;
      int flagTrain=0,flagTest=0;
      dio->write("DanielOrItsCommandOne");
      while(true){
+         // Reads the files and concatenates them into strings called Trainfile and Testfile:
          tempTrainFile=dio->readFile();
          trainFile=trainFile+tempTrainFile;
          if(trainFile.find("DanielOrFileDone") != string::npos){
@@ -20,6 +23,8 @@
              break;
          }
      }
+     // Opens two output file streams, one for "Train.csv" and the other for "Test.csv",
+     // and writes the contents of the Trainfile and Testfile strings to them, respectively:
      ofstream trainStream("train.csv");
      trainStream << trainFile;
      trainStream.close();
@@ -48,6 +53,8 @@
          flagTest=-1;
          return;
      }
+     // read the contents of the "Train.csv" and "Test.csv" files and store them in the vectors.
+     // If the vectors are empty, the method prompts the user with an error message and returns:
 
      dio->write("Upload complete.\n");
      if(flagTest==0&&flagTrain==0){
@@ -127,12 +134,15 @@ int Setting::checkKandM(SharedState* sharedState,string message) {/*
 }
 
 void Setting::execute(SharedState* sharedState) {
+    //  Retrieves the current values of k and distanceM  prints them to the user:
     int checkP;
     int k = sharedState->k;
     string distanceM = sharedState->distanceM;
+    //  Prompts the user to enter new values for k and distanceM:
     dio->write("The current KNN parameters are: K = " + std::to_string(k) +  ", distance metric = " + distanceM+"\n");
     dio->write("DanielOrYouDone");
     string input = dio->read();
+    // Receives a message from the user and  checks if the input is correct:
     if (input!="") {
         checkP= checkKandM(sharedState, input);
         if(checkP<0){
@@ -151,52 +161,74 @@ void Setting::execute(SharedState* sharedState) {
     }
 
 }
-
+// This function handles the process of classifying the data using KNN:
 void Classify:: execute(SharedState* sharedState)  {
+    //  Checks if the data has been uploaded:
     if (sharedState->isUpload== false) {
+        // If the data has not been uploaded, it asks the user with an error message and returns:
         dio->write("please upload data\n");
         return;
     }
+    // If the data has been uploaded, it creates a new KNN object:
         Knn answer(sharedState->dbTrain, sharedState->distanceM, sharedState->k);
+    // Classify each sample in the dbTest vector (by KNN):
         for(int i=0;i<sharedState->dbTest.size();i++){
             sharedState->dbTest[i].label=answer.findTheLabel(sharedState->dbTest[i].deatils);
         }
+        // Prompts the user with a message indicating that the classification is complete successfully:
         dio->write("classifying data complete\n");
         sharedState->isClassify= true;
 
 }
+
+// This function handles the process of displaying the results of the classification:  . , and then . Finally, it .
 void DisplayResult:: execute(SharedState* sharedState)  {
     string answer="";
+    // Checks if the data has been uploaded and classified:
     if (sharedState->isUpload== false) {
+        // If the data has not been uploaded, it prompts the user with an error message and returns:
         dio->write("please upload data\n");
         return;
     }
     if (sharedState->isClassify== false) {
+        // If the data has not been classified, it prompts the user with an error message and returns:
         dio->write("please classify the data\n");
         return;
     }
+    // If the data has been uploaded and classified,
+    // it concatenates the index and the label of each sample in the vector:
     for(int i=0;i<sharedState->dbTest.size();i++){
         answer=to_string(i+1) +" "+ sharedState->dbTest[i].label +"\n";
-        dio->write(answer);
+        dio->write(answer); // sends the concatenated string to the user
     }
+    // Prompts the user with a message indicating that the display is complete successfully:
     dio->write("Done.\n");
 
 }
+
+// This function handles the process of downloading the results of the classification:
 void DownlandResult::execute(SharedState* sharedState) {
+    // Checks if the data has been uploaded and classified:
     if (sharedState->isUpload == false) {
+        // // If the data has not been uploaded, it prompts the user with an error message and returns:
         dio->write("please upload data\n");
         return;
     }
     if (sharedState->isClassify == false) {
+        // // If the data has not been classified, it prompts the user with an error message and returns:
         dio->write("please classify the data\n");
         return;
     }
     string fileName;
     // Write the results to the file
     string results="";
+    // If the data has been uploaded and classified,
+    // it concatenates the index and the label of each sample in the vector:
     for (int i = 0; i < sharedState->dbTest.size(); i++) {
         results=results+(to_string(i + 1) + " " + sharedState->dbTest[i].label+"\n");
     }
+    // Sends the concatenated string to the user with a message indicating that
+    // the writing to file is complete successfully:
     results=results+"Done.DanielOrDoneWriteToFile";
     dio->write(results);
 

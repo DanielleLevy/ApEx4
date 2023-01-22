@@ -173,7 +173,10 @@ int Client::handleServerClient () {
     close(sockFD);
     return 0;
 }
-
+/*
+ * This function receives 2 strings, of content and sent the file name.
+ * The function opens the file and writes into it
+ */
 void Client::writeToFile(string contents, string fileName) {
     // Open the file for writing
     std::ofstream out(fileName);

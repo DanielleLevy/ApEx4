@@ -13,12 +13,12 @@ CLI::CLI(DefaultIO* dio) {/*
  * Exit: for exiting the CLI
  */
     this->dio=dio;
-    commandsToExe.push_back(new UploadCSV(dio));
-    commandsToExe.push_back(new Setting(dio));
-    commandsToExe.push_back(new Classify(dio));
-    commandsToExe.push_back(new DisplayResult(dio));
-    commandsToExe.push_back(new DownlandResult(dio));
-    commandsToExe.push_back(new Exit(dio));
+    commandsToExe.push_back(new UploadCSV(dio)); // for uploading a csv file
+    commandsToExe.push_back(new Setting(dio)); // for setting various parameters for the KNN classifier
+    commandsToExe.push_back(new Classify(dio)); // for running the classification on the uploaded data
+    commandsToExe.push_back(new DisplayResult(dio)); //  for displaying the classification results
+    commandsToExe.push_back(new DownlandResult(dio)); // for downloading the classification results
+    commandsToExe.push_back(new Exit(dio)); // for exiting the CLI
 }
 
 void CLI::start() {/*
