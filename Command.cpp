@@ -66,9 +66,12 @@
 }
 
 int Setting::checkKandM(SharedState* sharedState,string message) {/*
- * The function receives the message from the user and checks it.
- * If the input is correct, it returns 0 and keeps the vector, K and the distance function in the class members.
- * If the cell is incorrect, it returns -1.
+ * The function get a message with K ans distance function.
+ * If the input is correct, it returns 0 and keeps the K and the distance function in the sharedState.
+ * If the k is incorrect the function return -1.
+ * If the distance matric is incorrect the function return -2.
+ * If both are incorrect the functioon return -3.
+
  */
     int index=-1;//flag
     int kTempInt;
