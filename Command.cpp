@@ -181,7 +181,7 @@ void Classify:: execute(SharedState* sharedState)  {
 
 }
 
-// This function handles the process of displaying the results of the classification:  . , and then . Finally, it .
+// This function handles the process of displaying the results of the classification:  
 void DisplayResult:: execute(SharedState* sharedState)  {
     string answer="";
     // Checks if the data has been uploaded and classified:
